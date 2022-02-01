@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/device-active/baseline_check_circle_black_24dp.png</file>
+        <file>assets/device-active/baseline_check_circle_black_24dp@2x.png</file>
+        <file>assets/device-disabled/baseline_cancel_black_24dp.png</file>
+        <file>assets/device-disabled/baseline_cancel_black_24dp@2x.png</file>
+        <file>assets/device-normal/baseline_help_black_24dp.png</file>
+        <file>assets/device-normal/baseline_help_black_24dp@2x.png</file>
+    </qresource>
+</RCC>
