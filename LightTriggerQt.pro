@@ -11,16 +11,20 @@ CONFIG += c++11
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    models/availabledevicesmodel.cpp \
+    midi-windows/windowsmididevicesmodel.cpp \
+    models/availableserialdevicesmodel.cpp \
     serialdmxdevice.cpp
 
 HEADERS += \
     mainwindow.h \
-    models/availabledevicesmodel.h \
+    midi-windows/windowsmididevicesmodel.h \
+    models/availableserialdevicesmodel.h \
     serialdmxdevice.h
 
 FORMS += \
     mainwindow.ui
+
+LIBS += -lWinmm
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -29,3 +33,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     assets-resource.qrc
+

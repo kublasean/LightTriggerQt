@@ -1,19 +1,19 @@
-#include "availabledevicesmodel.h"
+#include "availableserialdevicesmodel.h"
 
 #include <QSerialPort>
 #include <QDebug>
 
-AvailableDevicesModel::AvailableDevicesModel(QObject *parent) : QAbstractListModel(parent)
+AvailableSerialDevicesModel::AvailableSerialDevicesModel(QObject *parent) : QAbstractListModel(parent)
 {
 
 }
 
-int AvailableDevicesModel::rowCount(const QModelIndex &parent) const
+int AvailableSerialDevicesModel::rowCount(const QModelIndex &parent) const
 {
     return deviceList.length();
 }
 
-QVariant AvailableDevicesModel::data(const QModelIndex &index, int role) const
+QVariant AvailableSerialDevicesModel::data(const QModelIndex &index, int role) const
 {
     if (index.column() == 0 && index.row() >= 0 && index.row() < deviceList.length()) {
         switch (role) {
@@ -31,15 +31,13 @@ QVariant AvailableDevicesModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-QVariant AvailableDevicesModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant AvailableSerialDevicesModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     return tr("Devices");
 }
 
-
-
 // TODO: replace model reset with only updating what has changed between old and new list
-void AvailableDevicesModel::updateDeviceList()
+void AvailableSerialDevicesModel::updateDeviceList()
 {
     beginResetModel();
 

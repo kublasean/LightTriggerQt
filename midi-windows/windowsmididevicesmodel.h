@@ -1,24 +1,24 @@
-#ifndef AVAILABLEDEVICESMODEL_H
-#define AVAILABLEDEVICESMODEL_H
+#ifndef WINDOWSMIDIDEVICESMODEL_H
+#define WINDOWSMIDIDEVICESMODEL_H
 
+#include <QObject>
 #include <QAbstractListModel>
-#include <QSerialPortInfo>
 
-class AvailableDevicesModel : public QAbstractListModel
+class WindowsMidiDevicesModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    AvailableDevicesModel(QObject *parent = nullptr);
+    explicit WindowsMidiDevicesModel(QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
+signals:
+
 public slots:
     void updateDeviceList();
 
-private:
-    QList<QSerialPortInfo> deviceList;
 };
 
-#endif // AVAILABLEDEVICESMODEL_H
+#endif // WINDOWSMIDIDEVICESMODEL_H

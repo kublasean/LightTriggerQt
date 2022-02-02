@@ -9,7 +9,8 @@
 #include <QColor>
 
 #include "serialdmxdevice.h"
-#include "models/availabledevicesmodel.h"
+#include "midi-windows/windowsmididevicesmodel.h"
+#include "models/availableserialdevicesmodel.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -37,6 +38,7 @@ private:
     QAction *disconnectDeviceAction, *connectDeviceAction;
     SerialDmxDevice *dmx;
     QThread dmxThread;
-    AvailableDevicesModel devicesModel;
+    AvailableSerialDevicesModel serialDevices;
+    WindowsMidiDevicesModel midiDevices;
 };
 #endif // MAINWINDOW_H

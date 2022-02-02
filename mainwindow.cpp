@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     QToolBar *deviceToolBar = addToolBar(tr("Device"));
     QComboBox *deviceDropDown = new QComboBox();
-    deviceDropDown->setModel(&devicesModel);
+    deviceDropDown->setModel(&serialDevices);
     deviceToolBar->addWidget(new QLabel(tr("DMX Device ")));
     deviceToolBar->addWidget(deviceDropDown);
     connect(deviceDropDown, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::dmxDeviceSelected);
@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     QAction *refreshDeviceAction = deviceToolBar->addAction(tr("Refresh"));
     refreshDeviceAction->setShortcut(tr("Ctrl+R"));
-    connect(refreshDeviceAction, &QAction::triggered, &devicesModel, &AvailableDevicesModel::updateDeviceList);
+    connect(refreshDeviceAction, &QAction::triggered, &serialDevices, &AvailableSerialDevicesModel::updateDeviceList);
     connect(dmx, &SerialDmxDevice::isConnected, refreshDeviceAction, &QAction::setDisabled);
 
     deviceToolBar->addSeparator();
@@ -56,7 +56,8 @@ MainWindow::MainWindow(QWidget *parent)
     this->setCentralWidget(colorPicker);
     connect(colorPicker, &QColorDialog::currentColorChanged, dmx, &SerialDmxDevice::setColor);
 
-    devicesModel.updateDeviceList();
+    serialDevices.updateDeviceList();
+    midiDevices.updateDeviceList();
 }
 
 
@@ -85,7 +86,7 @@ void MainWindow::dmxDeviceSelected(int row)
     statusIcon->setIcon(icon);
 
     if (!noDevices)
-        emit newSerialDmxDevice(devicesModel.data(devicesModel.index(row, 0), Qt::UserRole).toString());
+        emit newSerialDmxDevice(serialDevices.data(serialDevices.index(row, 0), Qt::UserRole).toString());
 }
 
 void MainWindow::onDmxStatus(bool isConnected)
