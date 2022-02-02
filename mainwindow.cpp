@@ -7,6 +7,7 @@
 #include <QToolButton>
 #include <QBitmap>
 #include <QDebug>
+#include <QColorDialog>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -48,6 +49,12 @@ MainWindow::MainWindow(QWidget *parent)
     statusIcon = new QToolButton();
     statusIcon->setDisabled(true);
     deviceToolBar->addWidget(statusIcon);
+
+    // Color dialog
+    QColorDialog *colorPicker = new QColorDialog();
+    colorPicker->setOption(QColorDialog::NoButtons);
+    this->setCentralWidget(colorPicker);
+    connect(colorPicker, &QColorDialog::currentColorChanged, dmx, &SerialDmxDevice::setColor);
 
     devicesModel.updateDeviceList();
 }

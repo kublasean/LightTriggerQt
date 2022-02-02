@@ -106,3 +106,11 @@ void SerialDmxDevice::onError(QSerialPort::SerialPortError error)
     qDebug() << error << dev->errorString();
 }
 
+void SerialDmxDevice::setColor(const QColor &color)
+{
+    buffer[2] = color.red();
+    buffer[3] = color.green();
+    buffer[4] = color.blue();
+}
+
+

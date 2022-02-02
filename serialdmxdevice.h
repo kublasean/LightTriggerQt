@@ -5,6 +5,7 @@
 #include <QSerialPort>
 #include <QByteArray>
 #include <QTimer>
+#include <QColor>
 
 class SerialDmxDevice : public QObject
 {
@@ -18,6 +19,7 @@ public slots:
     void newSelectedDevice(QString portName);
     void start();
     void stop();
+    void setColor(const QColor &color);
 
 signals:
     void debugMessage(QString message, int timeout=0);

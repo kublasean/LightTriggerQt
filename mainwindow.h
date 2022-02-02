@@ -6,6 +6,7 @@
 #include <QToolButton>
 #include <QAction>
 #include <QThread>
+#include <QColor>
 
 #include "serialdmxdevice.h"
 #include "models/availabledevicesmodel.h"
