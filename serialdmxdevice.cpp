@@ -17,7 +17,6 @@ SerialDmxDevice::~SerialDmxDevice()
     if (dev != nullptr && dev->isOpen()) {
         dev->close();
     }
-    qDebug() << "SerialDmxDevice destructor fin";
 }
 
 void SerialDmxDevice::init()
@@ -45,16 +44,18 @@ void SerialDmxDevice::start()
         return;
     }
 
-    sendTimer->start();
     if (dev->isOpen()) {
+        sendTimer->start();
         emit isConnected(true);
         return;
     }
 
     bool didOpen = dev->open(QIODevice::WriteOnly);
-    if (!didOpen) {
+    if (didOpen)
+        sendTimer->start();
+    else
         emit debugMessage(dev->errorString());
-    }
+
     emit isConnected(didOpen);
 }
 
@@ -104,6 +105,9 @@ void SerialDmxDevice::sendData()
 void SerialDmxDevice::onError(QSerialPort::SerialPortError error)
 {
     qDebug() << error << dev->errorString();
+
+    if (error == QSerialPort::NotOpenError)
+        stop();
 }
 
 void SerialDmxDevice::setColor(const QColor &color)

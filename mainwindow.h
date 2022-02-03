@@ -11,6 +11,7 @@
 #include "serialdmxdevice.h"
 #include "midi-windows/windowsmididevicesmodel.h"
 #include "models/availableserialdevicesmodel.h"
+#include "midi-windows/windowsmidiinputdevice.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -26,19 +27,11 @@ public:
     ~MainWindow();
 
 signals:
-    void newSerialDmxDevice(QString portName);
-
-private slots:
-    void dmxDeviceSelected(int index);
-    void onDmxStatus(bool isConnected);
 
 private:
     Ui::MainWindow *ui;
-    QToolButton *statusIcon;
-    QAction *disconnectDeviceAction, *connectDeviceAction;
     SerialDmxDevice *dmx;
+    WindowsMidiInputDevice midi;
     QThread dmxThread;
-    AvailableSerialDevicesModel serialDevices;
-    WindowsMidiDevicesModel midiDevices;
 };
 #endif // MAINWINDOW_H

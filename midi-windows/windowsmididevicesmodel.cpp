@@ -1,4 +1,5 @@
 #include "windowsmididevicesmodel.h"
+#include "windowsmidiutil.h"
 #include "Windows.h"
 #include <QDebug>
 
@@ -10,42 +11,56 @@ WindowsMidiDevicesModel::WindowsMidiDevicesModel(QObject *parent)
 
 int WindowsMidiDevicesModel::rowCount(const QModelIndex &) const
 {
-    return 0;
+    return deviceList.length();
 }
 
 QVariant WindowsMidiDevicesModel::data(const QModelIndex &index, int role) const
 {
-    return QVariant();
+    if (index.row() < 0 || index.row() >= deviceList.length())
+        return QVariant();
+
+    switch (role) {
+    case Qt::ToolTipRole:
+        return deviceList[index.row()].productId;
+    case Qt::UserRole:
+        return deviceList[index.row()].devId;
+    case Qt::DisplayRole:
+        return deviceList[index.row()].productName;
+    default:
+        return QVariant();
+    }
 }
 
-QVariant WindowsMidiDevicesModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant WindowsMidiDevicesModel::headerData(int, Qt::Orientation , int) const
 {
-    return QVariant();
+    return tr("MIDI Devices");
 }
 
 void WindowsMidiDevicesModel::updateDeviceList()
 {
-    int numDevices = midiInGetNumDevs()+1; // TODO remove error test +1
+    beginResetModel();
+    deviceList.clear();
+
+    int numDevices = midiInGetNumDevs();
     MIDIINCAPS devInfo;
 
     qDebug() << "MIDI Devices:" << numDevices;
     for (int i=0; i<numDevices; i++) {
         MMRESULT err = midiInGetDevCapsW(i, &devInfo, sizeof(MIDIINCAPS));
         if (err != MMSYSERR_NOERROR) {
-            wchar_t errBuf[MAXERRORLENGTH];
-            if (midiInGetErrorTextW(err, errBuf, MAXERRORLENGTH) == MMSYSERR_NOERROR) {
-                qDebug() << "Device capability read error:" << QString::fromWCharArray(errBuf);
-            } else {
-                qDebug() << "Unknown MIDI device capability read error";
-            }
+            printMMRESULT(err);
             continue;
         }
-        qDebug() << "MIDI Device" << i << Qt::endl
-                 << "Manufacturer ID:" << devInfo.wMid << Qt::endl
-                 << "Product ID:" << devInfo.wPid << Qt::endl
-                 << "Product Name:" << QString::fromWCharArray(devInfo.szPname) << Qt::endl
-                 << "Driver version:" << ((devInfo.vDriverVersion >> 4) & 0xFF) << "." << (devInfo.vDriverVersion & 0xFF) << Qt::endl;
+
+        MidiDevInfo qDevInfo;
+        qDevInfo.devId = i;
+        qDevInfo.manufacturerId = devInfo.wMid;
+        qDevInfo.productId = devInfo.wPid;
+        qDevInfo.productName = QString::fromWCharArray(devInfo.szPname);
+        deviceList.append(qDevInfo);
     }
+
+    endResetModel();
 }
 
 

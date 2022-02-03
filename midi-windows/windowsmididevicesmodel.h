@@ -4,6 +4,13 @@
 #include <QObject>
 #include <QAbstractListModel>
 
+struct MidiDevInfo {
+    int devId;
+    int manufacturerId;
+    int productId;
+    QString productName;
+};
+
 class WindowsMidiDevicesModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -18,6 +25,9 @@ signals:
 
 public slots:
     void updateDeviceList();
+
+private:
+    QList<MidiDevInfo> deviceList;
 
 };
 
