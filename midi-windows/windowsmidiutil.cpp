@@ -1,6 +1,7 @@
 #include "windowsmidiutil.h"
 #include <QDebug>
 
+
 void printMMRESULT(MMRESULT err)
 {
     wchar_t errBuf[MAXERRORLENGTH];
@@ -10,3 +11,6 @@ void printMMRESULT(MMRESULT err)
         qDebug() << "Unknown MIDI error";
     }
 }
+
+
+

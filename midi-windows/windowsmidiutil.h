@@ -2,6 +2,7 @@
 #define WINDOWSMIDIUTIL_H
 
 #include "windows.h"
+#include <QString>
 
 void printMMRESULT(MMRESULT err);
 

@@ -8,9 +8,9 @@
 
 struct TriggerDetails {
     QString nickname;
-    QColor color;
-    bool active;
-    int listIndex;
+    QColor color;       // color to send when triggered
+    bool active;        // is the trigger enabled
+    bool detected;      // have we seen this MIDI note before
 };
 
 class TriggerEffectModel : public QAbstractListModel
@@ -23,12 +23,20 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
+    static QString getNoteName(int note);
+    static QString getDetailedNoteName(int note);
+
 public slots:
     void onMidiNote(int note, int velocity);
 
+signals:
+    void sendColor(const QColor &color);
+
 private:
-    QList<int> triggerList;
-    QMap<int, TriggerDetails> triggerMap;
+    QVector<int> detectedNotesList;
+    QVector<TriggerDetails> noteMap;
+
+    static QStringList noteNames;
 };
 
 #endif // TRIGGEREFFECTMODEL_H
