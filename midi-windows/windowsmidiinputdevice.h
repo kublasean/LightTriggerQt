@@ -19,6 +19,7 @@ public slots:
 
 signals:
     void isConnected(bool connected);
+    void newNoteEvent(int note, int velocity);
 
 private:
     int devId;

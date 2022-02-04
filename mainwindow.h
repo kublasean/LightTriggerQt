@@ -8,9 +8,9 @@
 #include <QThread>
 #include <QColor>
 
-#include "serialdmxdevice.h"
+#include "dmx-serial/serialdmxdevice.h"
+#include "dmx-serial/availableserialdevicesmodel.h"
 #include "midi-windows/windowsmididevicesmodel.h"
-#include "models/availableserialdevicesmodel.h"
 #include "midi-windows/windowsmidiinputdevice.h"
 
 
@@ -27,6 +27,10 @@ public:
     ~MainWindow();
 
 signals:
+    void sendColor(const QColor &color);
+
+private slots:
+    void onMidiNote(int note, int velocity);
 
 private:
     Ui::MainWindow *ui;

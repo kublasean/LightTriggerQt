@@ -5,7 +5,7 @@
 #include <QToolButton>
 
 #include "serialdmxdevice.h"
-#include "models/availableserialdevicesmodel.h"
+#include "availableserialdevicesmodel.h"
 
 class DmxToolBar : public QToolBar
 {

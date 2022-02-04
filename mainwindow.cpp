@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "dmxtoolbar.h"
+#include "dmx-serial/dmxtoolbar.h"
 #include "midi-windows/miditoolbar.h"
 
 #include <QToolBar>
@@ -30,10 +30,13 @@ MainWindow::MainWindow(QWidget *parent)
     addToolBar(new MidiToolBar(&midi, tr("MIDI")));
 
     // Color dialog
-    QColorDialog *colorPicker = new QColorDialog();
+    /*QColorDialog *colorPicker = new QColorDialog();
     colorPicker->setOption(QColorDialog::NoButtons);
     this->setCentralWidget(colorPicker);
-    connect(colorPicker, &QColorDialog::currentColorChanged, dmx, &SerialDmxDevice::setColor);
+    connect(colorPicker, &QColorDialog::currentColorChanged, dmx, &SerialDmxDevice::setColor);*/
+
+    connect(&midi, &WindowsMidiInputDevice::newNoteEvent, this, &MainWindow::onMidiNote);
+    connect(this, &MainWindow::sendColor, dmx, &SerialDmxDevice::setColor);
 }
 
 
@@ -49,6 +52,15 @@ MainWindow::~MainWindow()
     } else {
         qDebug() << "Quit thread gracefully";
     }
+}
+
+void MainWindow::onMidiNote(int note, int velocity)
+{
+    int val = 255;
+    if (velocity == 0)
+        val = 0;
+
+    emit sendColor(QColor::fromRgb(val, val, val));
 }
 
 
