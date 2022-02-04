@@ -9,9 +9,8 @@
 #include <QColor>
 
 #include "dmx-serial/serialdmxdevice.h"
-#include "dmx-serial/availableserialdevicesmodel.h"
-#include "midi-windows/windowsmididevicesmodel.h"
 #include "midi-windows/windowsmidiinputdevice.h"
+#include "triggereffectmodel.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -35,7 +34,8 @@ private slots:
 private:
     Ui::MainWindow *ui;
     SerialDmxDevice *dmx;
-    WindowsMidiInputDevice midi;
     QThread dmxThread;
+    WindowsMidiInputDevice midi;
+    TriggerEffectModel model;
 };
 #endif // MAINWINDOW_H

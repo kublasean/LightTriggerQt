@@ -17,7 +17,8 @@ SOURCES += \
     midi-windows/windowsmidiinputdevice.cpp \
     midi-windows/windowsmidiutil.cpp \
     dmx-serial/availableserialdevicesmodel.cpp \
-    dmx-serial/serialdmxdevice.cpp
+    dmx-serial/serialdmxdevice.cpp \
+    triggereffectmodel.cpp
 
 HEADERS += \
     dmx-serial/dmxtoolbar.h \
@@ -27,7 +28,8 @@ HEADERS += \
     midi-windows/windowsmidiinputdevice.h \
     midi-windows/windowsmidiutil.h \
     dmx-serial/availableserialdevicesmodel.h \
-    dmx-serial/serialdmxdevice.h
+    dmx-serial/serialdmxdevice.h \
+    triggereffectmodel.h
 
 FORMS += \
     mainwindow.ui

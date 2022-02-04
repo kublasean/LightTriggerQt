@@ -35,8 +35,11 @@ MainWindow::MainWindow(QWidget *parent)
     this->setCentralWidget(colorPicker);
     connect(colorPicker, &QColorDialog::currentColorChanged, dmx, &SerialDmxDevice::setColor);*/
 
-    connect(&midi, &WindowsMidiInputDevice::newNoteEvent, this, &MainWindow::onMidiNote);
-    connect(this, &MainWindow::sendColor, dmx, &SerialDmxDevice::setColor);
+    //connect(&midi, &WindowsMidiInputDevice::newNoteEvent, this, &MainWindow::onMidiNote);
+    //connect(this, &MainWindow::sendColor, dmx, &SerialDmxDevice::setColor);
+
+    ui->noteListView->setModel(&model);
+    connect(&midi, &WindowsMidiInputDevice::newNoteEvent, &model, &TriggerEffectModel::onMidiNote);
 }
 
 
