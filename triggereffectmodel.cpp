@@ -27,6 +27,11 @@ TriggerEffectModel::TriggerEffectModel(QObject *parent)
     }
 }
 
+Qt::ItemFlags TriggerEffectModel::flags(const QModelIndex &index) const
+{
+    return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
+}
+
 int TriggerEffectModel::rowCount(const QModelIndex &) const
 {
     return detectedNotesList.length();
@@ -34,7 +39,7 @@ int TriggerEffectModel::rowCount(const QModelIndex &) const
 
 QVariant TriggerEffectModel::data(const QModelIndex &index, int role) const
 {
-    if (index.row() < 0 || index.row() >= detectedNotesList.length()) {
+    if (!checkIndex(index)) {
         return QVariant();
     }
 
@@ -42,13 +47,39 @@ QVariant TriggerEffectModel::data(const QModelIndex &index, int role) const
     const TriggerDetails &details = noteMap[note];
 
     switch (role) {
+    case Qt::EditRole:
     case Qt::DisplayRole:
         return details.nickname;
     case Qt::ToolTipRole:
         return getDetailedNoteName(note);
+    case Qt::UserRole:
+        return details.color;
     default:
         return QVariant();
     }
+}
+
+bool TriggerEffectModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if (!checkIndex(index))
+        return false;
+
+    int note = detectedNotesList[index.row()];
+
+    switch (role) {
+    case Qt::EditRole:
+        noteMap[note].nickname = value.toString();
+        break;
+    case Qt::UserRole:
+        noteMap[note].active = true;
+        noteMap[note].color = value.value<QColor>();
+        break;
+    default:
+        return false;
+    }
+
+    emit dataChanged(index, index, {role});
+    return true;
 }
 
 QVariant TriggerEffectModel::headerData(int, Qt::Orientation, int) const

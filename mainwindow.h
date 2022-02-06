@@ -7,6 +7,8 @@
 #include <QAction>
 #include <QThread>
 #include <QColor>
+#include <QColorDialog>
+#include <QItemSelection>
 
 #include "dmx-serial/serialdmxdevice.h"
 #include "midi-windows/windowsmidiinputdevice.h"
@@ -26,16 +28,17 @@ public:
     ~MainWindow();
 
 signals:
-    void sendColor(const QColor &color);
 
 private slots:
-    void onMidiNote(int note, int velocity);
+    void onNewColor(const QColor &color);
+    void onNoteSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 
 private:
     Ui::MainWindow *ui;
     SerialDmxDevice *dmx;
     QThread dmxThread;
     WindowsMidiInputDevice midi;
-    TriggerEffectModel model;
+    TriggerEffectModel effectModel;
+    QColorDialog *colorPicker;
 };
 #endif // MAINWINDOW_H

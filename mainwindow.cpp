@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->noteListView->setModel(&effectModel);
 
     dmx = new SerialDmxDevice();
     dmx->moveToThread(&dmxThread);
@@ -30,16 +31,16 @@ MainWindow::MainWindow(QWidget *parent)
     addToolBar(new MidiToolBar(&midi, tr("MIDI")));
 
     // Color dialog
-    /*QColorDialog *colorPicker = new QColorDialog();
+    colorPicker = new QColorDialog();
     colorPicker->setOption(QColorDialog::NoButtons);
-    this->setCentralWidget(colorPicker);
-    connect(colorPicker, &QColorDialog::currentColorChanged, dmx, &SerialDmxDevice::setColor);*/
+    ui->horizontalLayout->addWidget(colorPicker);
+    connect(colorPicker, &QColorDialog::currentColorChanged, this, &MainWindow::onNewColor);
+    connect(ui->noteListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::onNoteSelectionChanged);
 
-    //connect(&midi, &WindowsMidiInputDevice::newNoteEvent, this, &MainWindow::onMidiNote);
-    //connect(this, &MainWindow::sendColor, dmx, &SerialDmxDevice::setColor);
 
-    ui->noteListView->setModel(&model);
-    connect(&midi, &WindowsMidiInputDevice::newNoteEvent, &model, &TriggerEffectModel::onMidiNote);
+    connect(&midi, &WindowsMidiInputDevice::newNoteEvent, &effectModel, &TriggerEffectModel::onMidiNote);
+    connect(&effectModel, &TriggerEffectModel::sendColor, dmx, &SerialDmxDevice::setColor);
+
 }
 
 
@@ -57,13 +58,25 @@ MainWindow::~MainWindow()
     }
 }
 
-void MainWindow::onMidiNote(int note, int velocity)
+void MainWindow::onNewColor(const QColor &color)
 {
-    int val = 255;
-    if (velocity == 0)
-        val = 0;
+    QModelIndexList rows = ui->noteListView->selectionModel()->selectedRows();
+    for (const QModelIndex &row : rows) {
+        effectModel.setData(row, color, Qt::UserRole);
+    }
+}
 
-    emit sendColor(QColor::fromRgb(val, val, val));
+void MainWindow::onNoteSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+{
+    if (selected.isEmpty()) {
+        colorPicker->setCurrentColor(QColor());
+        colorPicker->setEnabled(false);
+    } else {
+        auto index = selected.first().topLeft();
+        qDebug() << "index row:" << index.row();
+        colorPicker->setCurrentColor(effectModel.data(index, Qt::UserRole).value<QColor>());
+        colorPicker->setEnabled(true);
+    }
 }
 
 
