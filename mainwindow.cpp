@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->noteListView->setModel(&effectModel);
+    ui->noteListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     dmx = new SerialDmxDevice();
     dmx->moveToThread(&dmxThread);

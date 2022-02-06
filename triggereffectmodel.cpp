@@ -1,5 +1,6 @@
 #include "triggereffectmodel.h"
 #include <QDebug>
+#include <QBrush>
 
 #define NUM_MIDI_NOTES 128
 
@@ -22,8 +23,9 @@ TriggerEffectModel::TriggerEffectModel(QObject *parent)
     for (int i=0; i<NUM_MIDI_NOTES; i++) {
         noteMap[i].active = false;
         noteMap[i].detected = false;
-        noteMap[i].color = QColor::fromRgb(0, 0, 0);
-        noteMap[i].nickname = getDetailedNoteName(i);
+        noteMap[i].color = QColor::fromRgb(0, 0, 0, 0);
+        noteMap[i].nickname = "";
+        noteMap[i].pressed = false;
     }
 }
 
@@ -48,12 +50,16 @@ QVariant TriggerEffectModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
     case Qt::EditRole:
-    case Qt::DisplayRole:
         return details.nickname;
+    case Qt::DisplayRole:
+        return getNoteName(note) + " " + details.nickname;
     case Qt::ToolTipRole:
-        return getDetailedNoteName(note);
+        return tr("MIDI note number: ") + QString::number(note);
     case Qt::UserRole:
+    case Qt::DecorationRole:
         return details.color;
+    case Qt::BackgroundRole:
+        return details.pressed ? QBrush(details.color) : QBrush(Qt::NoBrush);
     default:
         return QVariant();
     }
@@ -73,6 +79,9 @@ bool TriggerEffectModel::setData(const QModelIndex &index, const QVariant &value
     case Qt::UserRole:
         noteMap[note].active = true;
         noteMap[note].color = value.value<QColor>();
+        break;
+    case Qt::BackgroundRole:
+        noteMap[note].pressed = value.toBool();
         break;
     default:
         return false;
@@ -111,8 +120,10 @@ void TriggerEffectModel::onMidiNote(int note, int velocity)
         detectedNotesList.insert(pos, note);
 
         endInsertRows();
-        return;
     }
+
+    setData(index(detectedNotesList.indexOf(note)), velocity != 0, Qt::BackgroundRole);
+
 
     if (noteMap[note].active)
         emit sendColor(velocity == 0 ? QColor::fromRgb(0,0,0) : noteMap[note].color);

@@ -11,6 +11,7 @@ struct TriggerDetails {
     QColor color;       // color to send when triggered
     bool active;        // is the trigger enabled
     bool detected;      // have we seen this MIDI note before
+    bool pressed;       // is the note pressed
 };
 
 class TriggerEffectModel : public QAbstractListModel
