@@ -9,29 +9,24 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    dmx-serial/dmxtoolbar.cpp \
+    devicesdialog.cpp \
     main.cpp \
     mainwindow.cpp \
-    midi-windows/miditoolbar.cpp \
-    midi-windows/windowsmididevicesmodel.cpp \
     midi-windows/windowsmidiinputdevice.cpp \
     midi-windows/windowsmidiutil.cpp \
-    dmx-serial/availableserialdevicesmodel.cpp \
     dmx-serial/serialdmxdevice.cpp \
     triggereffectmodel.cpp
 
 HEADERS += \
-    dmx-serial/dmxtoolbar.h \
+    devicesdialog.h \
     mainwindow.h \
-    midi-windows/miditoolbar.h \
-    midi-windows/windowsmididevicesmodel.h \
     midi-windows/windowsmidiinputdevice.h \
     midi-windows/windowsmidiutil.h \
-    dmx-serial/availableserialdevicesmodel.h \
     dmx-serial/serialdmxdevice.h \
     triggereffectmodel.h
 
 FORMS += \
+    devicesdialog.ui \
     mainwindow.ui
 
 LIBS += -lWinmm

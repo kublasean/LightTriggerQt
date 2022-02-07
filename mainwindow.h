@@ -2,8 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QComboBox>
-#include <QToolButton>
 #include <QAction>
 #include <QThread>
 #include <QColor>
@@ -30,6 +28,7 @@ public:
 signals:
 
 private slots:
+    void openDeviceDialog();
     void onNewColor(const QColor &color);
     void onNoteSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 
@@ -37,7 +36,7 @@ private:
     Ui::MainWindow *ui;
     SerialDmxDevice *dmx;
     QThread dmxThread;
-    WindowsMidiInputDevice midi;
+    WindowsMidiInputDevice *midi;
     TriggerEffectModel effectModel;
     QColorDialog *colorPicker;
 };

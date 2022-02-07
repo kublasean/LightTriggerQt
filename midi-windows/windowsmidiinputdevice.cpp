@@ -54,11 +54,28 @@ void CALLBACK MidiInProc(HMIDIIN hMidiIn, UINT wMsg, DWORD_PTR userData, DWORD_P
     }
 }
 
-
-WindowsMidiInputDevice::WindowsMidiInputDevice(QObject *parent) : QObject(parent)
+WindowsMidiInputDevice::WindowsMidiInputDevice(QString initialProductName, QObject *parent) : QObject(parent)
 {
     devId = -1;
     midiHandle = nullptr;
+
+    // Search for the product name and connect immediately if found
+    if (!initialProductName.isNull() && !initialProductName.isEmpty()) {
+        int numDevices = midiInGetNumDevs();
+        MIDIINCAPS devInfo;
+
+        for (int i=0; i<numDevices; i++) {
+            if (midiInGetDevCapsW(i, &devInfo, sizeof(MIDIINCAPS)) != MMSYSERR_NOERROR) {
+                continue;
+            }
+
+            if (initialProductName == QString::fromWCharArray(devInfo.szPname)) {
+                devId = i;
+                start();
+                return;
+            }
+        }
+    }
 }
 
 WindowsMidiInputDevice::~WindowsMidiInputDevice()
@@ -69,10 +86,23 @@ WindowsMidiInputDevice::~WindowsMidiInputDevice()
     }
 }
 
-void WindowsMidiInputDevice::setDevId(int id)
+void WindowsMidiInputDevice::switchDevice(int id)
 {
-    if (midiHandle == nullptr)
-        devId = id;
+    if (id == -1)
+        return;
+
+    if (devId == id) {
+
+        // not open
+        if (midiHandle == nullptr) {
+            start();
+        }
+        return;
+    }
+
+    stop();
+    devId = id;
+    start();
 }
 
 void WindowsMidiInputDevice::start()

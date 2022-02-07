@@ -11,7 +11,7 @@ class SerialDmxDevice : public QObject
 {
     Q_OBJECT
 public:
-    explicit SerialDmxDevice(QObject *parent = nullptr);
+    explicit SerialDmxDevice(QString initialPortName = QString(), QObject *parent = nullptr);
     ~SerialDmxDevice();
 
 public slots:
@@ -30,6 +30,7 @@ private slots:
     void sendData();
 
 private:
+    const QString initialPortName;
     bool isValid;
     QSerialPort *dev;
     QByteArray buffer;

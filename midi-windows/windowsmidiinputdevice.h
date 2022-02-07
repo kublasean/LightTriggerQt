@@ -9,11 +9,11 @@ class WindowsMidiInputDevice : public QObject
 {
     Q_OBJECT
 public:
-    explicit WindowsMidiInputDevice(QObject *parent = nullptr);
+    explicit WindowsMidiInputDevice(QString intialProductName = QString(), QObject *parent = nullptr);
     ~WindowsMidiInputDevice();
 
 public slots:
-    void setDevId(int id);
+    void switchDevice(int id);
     void start();
     void stop();
 

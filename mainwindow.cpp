@@ -1,35 +1,31 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "dmx-serial/dmxtoolbar.h"
-#include "midi-windows/miditoolbar.h"
+#include "devicesdialog.h"
 
-#include <QToolBar>
-#include <QLabel>
-#include <QPushButton>
-#include <QToolButton>
-#include <QBitmap>
 #include <QDebug>
 #include <QColorDialog>
+#include <QSettings>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    QSettings settings;
+
     ui->setupUi(this);
     ui->noteListView->setModel(&effectModel);
     ui->noteListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-    dmx = new SerialDmxDevice();
+    midi = new WindowsMidiInputDevice(settings.value("midiProductName").toString());
+
+    dmx = new SerialDmxDevice(settings.value("dmxSerialPort").toString());
     dmx->moveToThread(&dmxThread);
     connect(&dmxThread, &QThread::started, dmx, &SerialDmxDevice::init);
     connect(&dmxThread, &QThread::finished, dmx, &QObject::deleteLater);
+    connect(dmx, &SerialDmxDevice::debugMessage, ui->statusbar, &QStatusBar::showMessage);
     dmxThread.start();
 
-    connect(dmx, &SerialDmxDevice::debugMessage, ui->statusbar, &QStatusBar::showMessage);
-
-    addToolBar(new DmxToolBar(dmx, tr("DMX")));
-    addToolBarBreak();
-    addToolBar(new MidiToolBar(&midi, tr("MIDI")));
+    menuBar()->addAction(tr("Devices"), this, &MainWindow::openDeviceDialog);
 
     // Color dialog
     colorPicker = new QColorDialog();
@@ -39,9 +35,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->noteListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::onNoteSelectionChanged);
 
 
-    connect(&midi, &WindowsMidiInputDevice::newNoteEvent, &effectModel, &TriggerEffectModel::onMidiNote);
+    connect(midi, &WindowsMidiInputDevice::newNoteEvent, &effectModel, &TriggerEffectModel::onMidiNote);
     connect(&effectModel, &TriggerEffectModel::sendColor, dmx, &SerialDmxDevice::setColor);
-
 }
 
 
@@ -57,6 +52,12 @@ MainWindow::~MainWindow()
     } else {
         qDebug() << "Quit thread gracefully";
     }
+}
+
+void MainWindow::openDeviceDialog()
+{
+    DevicesDialog dialog(dmx, midi, this);
+    dialog.exec();
 }
 
 void MainWindow::onNewColor(const QColor &color)
@@ -79,6 +80,3 @@ void MainWindow::onNoteSelectionChanged(const QItemSelection &selected, const QI
         colorPicker->setEnabled(true);
     }
 }
-
-
-

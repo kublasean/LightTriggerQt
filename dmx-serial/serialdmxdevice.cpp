@@ -1,8 +1,8 @@
 #include "serialdmxdevice.h"
 #include <QDebug>
 
-SerialDmxDevice::SerialDmxDevice(QObject *parent)
-    : QObject{parent}
+SerialDmxDevice::SerialDmxDevice(QString portName, QObject *parent)
+    : QObject{parent}, initialPortName(portName)
 {
     isValid = false;
     buffer.fill(0xFF, 513);
@@ -35,6 +35,10 @@ void SerialDmxDevice::init()
     sendTimer = new QTimer(this);
     sendTimer->setInterval(20);
     connect(sendTimer, &QTimer::timeout, this, &SerialDmxDevice::sendData);
+
+    if (!initialPortName.isNull() && !initialPortName.isEmpty()) {
+        newSelectedDevice(initialPortName);
+    }
 }
 
 void SerialDmxDevice::start()
@@ -79,11 +83,24 @@ void SerialDmxDevice::newSelectedDevice(QString portName)
         return;
     }
 
-    if (dev->isOpen()) {
+    // invalid new device, just disconnect from current
+    if (portName.isNull()) {
         stop();
+        return;
     }
 
+    // same device
+    if (portName == dev->portName()) {
+        if (!dev->isOpen()) {
+            start();
+        }
+        return;
+    }
+
+    // new device
+    stop();
     dev->setPortName(portName);
+    start();
 }
 
 void SerialDmxDevice::sendData()
