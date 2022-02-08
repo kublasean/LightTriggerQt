@@ -10,7 +10,8 @@
 
 #include "dmx-serial/serialdmxdevice.h"
 #include "midi-windows/windowsmidiinputdevice.h"
-#include "triggereffectmodel.h"
+#include "midinotemodel.h"
+#include "detectedmidinotemodel.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -37,7 +38,9 @@ private:
     SerialDmxDevice *dmx;
     QThread dmxThread;
     WindowsMidiInputDevice *midi;
-    TriggerEffectModel effectModel;
     QColorDialog *colorPicker;
+
+    MidiNoteModel notesModel;
+    DetectedMidiNoteModel detectedNotesModel;
 };
 #endif // MAINWINDOW_H

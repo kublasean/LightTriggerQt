@@ -12,8 +12,11 @@ MainWindow::MainWindow(QWidget *parent)
 {
     QSettings settings;
 
+    detectedNotesModel.setSourceModel(&notesModel);
+    detectedNotesModel.setDynamicSortFilter(true);
+
     ui->setupUi(this);
-    ui->noteListView->setModel(&effectModel);
+    ui->noteListView->setModel(&detectedNotesModel);
     ui->noteListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     midi = new WindowsMidiInputDevice(settings.value("midiProductName").toString());
@@ -35,8 +38,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->noteListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::onNoteSelectionChanged);
 
 
-    connect(midi, &WindowsMidiInputDevice::newNoteEvent, &effectModel, &TriggerEffectModel::onMidiNote);
-    connect(&effectModel, &TriggerEffectModel::sendColor, dmx, &SerialDmxDevice::setColor);
+    connect(midi, &WindowsMidiInputDevice::newNoteEvent, &notesModel, &MidiNoteModel::onMidiNote);
+    connect(&notesModel, &MidiNoteModel::sendColor, dmx, &SerialDmxDevice::setColor);
 }
 
 
@@ -64,7 +67,7 @@ void MainWindow::onNewColor(const QColor &color)
 {
     QModelIndexList rows = ui->noteListView->selectionModel()->selectedRows();
     for (const QModelIndex &row : rows) {
-        effectModel.setData(row, color, Qt::UserRole);
+        detectedNotesModel.setData(row, color, Qt::DecorationRole);
     }
 }
 
@@ -76,7 +79,7 @@ void MainWindow::onNoteSelectionChanged(const QItemSelection &selected, const QI
     } else {
         auto index = selected.first().topLeft();
         qDebug() << "index row:" << index.row();
-        colorPicker->setCurrentColor(effectModel.data(index, Qt::UserRole).value<QColor>());
+        colorPicker->setCurrentColor(detectedNotesModel.data(index, Qt::DecorationRole).value<QColor>());
         colorPicker->setEnabled(true);
     }
 }

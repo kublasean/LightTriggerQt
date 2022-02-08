@@ -1,24 +1,24 @@
-#ifndef TRIGGEREFFECTMODEL_H
-#define TRIGGEREFFECTMODEL_H
+#ifndef MIDINOTEMODEL_H
+#define MIDINOTEMODEL_H
 
 #include <QAbstractListModel>
 #include <QObject>
 #include <QMap>
 #include <QColor>
 
-struct TriggerDetails {
+struct MidiNoteEffect {
     QString nickname;
     QColor color;       // color to send when triggered
-    bool active;        // is the trigger enabled
+    bool active;        // is the effect enabled
     bool detected;      // have we seen this MIDI note before
     bool pressed;       // is the note pressed
 };
 
-class TriggerEffectModel : public QAbstractListModel
+class MidiNoteModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    explicit TriggerEffectModel(QObject *parent = nullptr);
+    explicit MidiNoteModel(QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
@@ -36,10 +36,9 @@ signals:
     void sendColor(const QColor &color);
 
 private:
-    QVector<int> detectedNotesList;
-    QVector<TriggerDetails> noteMap;
+    QVector<MidiNoteEffect> noteMap;
 
     static QStringList noteNames;
 };
 
-#endif // TRIGGEREFFECTMODEL_H
+#endif // MIDINOTEMODEL_H

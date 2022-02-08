@@ -9,21 +9,23 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    detectedmidinotemodel.cpp \
     devicesdialog.cpp \
     main.cpp \
     mainwindow.cpp \
     midi-windows/windowsmidiinputdevice.cpp \
     midi-windows/windowsmidiutil.cpp \
     dmx-serial/serialdmxdevice.cpp \
-    triggereffectmodel.cpp
+    midinotemodel.cpp
 
 HEADERS += \
+    detectedmidinotemodel.h \
     devicesdialog.h \
     mainwindow.h \
     midi-windows/windowsmidiinputdevice.h \
     midi-windows/windowsmidiutil.h \
     dmx-serial/serialdmxdevice.h \
-    triggereffectmodel.h
+    midinotemodel.h
 
 FORMS += \
     devicesdialog.ui \
