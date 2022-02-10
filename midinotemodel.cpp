@@ -2,7 +2,6 @@
 #include <QDebug>
 #include <QBrush>
 
-#define NUM_MIDI_NOTES 128
 
 QStringList MidiNoteModel::noteNames = {"C","C#","D","D#","E","F","F#","G","G#","A","A#","B"};
 
@@ -56,7 +55,11 @@ QVariant MidiNoteModel::data(const QModelIndex &index, int role) const
     case Qt::ToolTipRole:
         return tr("MIDI note number: ") + QString::number(note);
     case Qt::UserRole:
-        return details.detected;
+    {
+        QVariant tmp;
+        tmp.setValue(details);
+        return tmp;
+    }
     case Qt::DecorationRole:
         return details.color;
     case Qt::BackgroundRole:

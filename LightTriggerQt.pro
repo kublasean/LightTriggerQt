@@ -16,7 +16,8 @@ SOURCES += \
     midi-windows/windowsmidiinputdevice.cpp \
     midi-windows/windowsmidiutil.cpp \
     dmx-serial/serialdmxdevice.cpp \
-    midinotemodel.cpp
+    midinotemodel.cpp \
+    midinotetileview.cpp
 
 HEADERS += \
     detectedmidinotemodel.h \
@@ -25,7 +26,8 @@ HEADERS += \
     midi-windows/windowsmidiinputdevice.h \
     midi-windows/windowsmidiutil.h \
     dmx-serial/serialdmxdevice.h \
-    midinotemodel.h
+    midinotemodel.h \
+    midinotetileview.h
 
 FORMS += \
     devicesdialog.ui \

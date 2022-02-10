@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "devicesdialog.h"
+#include "midinotetileview.h"
 
 #include <QDebug>
 #include <QColorDialog>
@@ -40,6 +41,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(midi, &WindowsMidiInputDevice::newNoteEvent, &notesModel, &MidiNoteModel::onMidiNote);
     connect(&notesModel, &MidiNoteModel::sendColor, dmx, &SerialDmxDevice::setColor);
+
+    new MidiNoteTileView(&notesModel, ui->frame);
 }
 
 
@@ -65,10 +68,10 @@ void MainWindow::openDeviceDialog()
 
 void MainWindow::onNewColor(const QColor &color)
 {
-    QModelIndexList rows = ui->noteListView->selectionModel()->selectedRows();
-    for (const QModelIndex &row : rows) {
+   QModelIndexList rows = ui->noteListView->selectionModel()->selectedRows();
+   for (const QModelIndex &row : rows) {
         detectedNotesModel.setData(row, color, Qt::DecorationRole);
-    }
+   }
 }
 
 void MainWindow::onNoteSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)

@@ -1,6 +1,8 @@
 #ifndef MIDINOTEMODEL_H
 #define MIDINOTEMODEL_H
 
+#define NUM_MIDI_NOTES 128
+
 #include <QAbstractListModel>
 #include <QObject>
 #include <QMap>
@@ -13,6 +15,8 @@ struct MidiNoteEffect {
     bool detected;      // have we seen this MIDI note before
     bool pressed;       // is the note pressed
 };
+
+Q_DECLARE_METATYPE(MidiNoteEffect);
 
 class MidiNoteModel : public QAbstractListModel
 {
