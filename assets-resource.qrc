@@ -6,5 +6,11 @@
         <file>assets/device-disabled/baseline_cancel_black_24dp@2x.png</file>
         <file>assets/device-normal/baseline_help_black_24dp.png</file>
         <file>assets/device-normal/baseline_help_black_24dp@2x.png</file>
+        <file>assets/nav-project/baseline_app_registration_black_24dp.png</file>
+        <file>assets/nav-project/baseline_app_registration_black_24dp@2x.png</file>
+        <file>assets/nav-scenes/baseline_batch_prediction_black_24dp.png</file>
+        <file>assets/nav-scenes/baseline_batch_prediction_black_24dp@2x.png</file>
+        <file>assets/nav-triggers/baseline_piano_black_24dp.png</file>
+        <file>assets/nav-triggers/baseline_piano_black_24dp@2x.png</file>
     </qresource>
 </RCC>

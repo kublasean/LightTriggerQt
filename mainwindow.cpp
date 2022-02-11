@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "devicesdialog.h"
 #include "midinotetileview.h"
+#include "navtoolbar.h"
 
 #include <QDebug>
 #include <QColorDialog>
@@ -43,6 +44,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&notesModel, &MidiNoteModel::sendColor, dmx, &SerialDmxDevice::setColor);
 
     new MidiNoteTileView(&notesModel, ui->frame);
+
+    // Nav toolbar
+    addToolBar(Qt::ToolBarArea::LeftToolBarArea, new NavToolBar(this));
 }
 
 
