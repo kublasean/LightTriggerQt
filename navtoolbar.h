@@ -11,6 +11,9 @@ public:
 
     explicit NavToolBar(QWidget *parent = nullptr);
 
+signals:
+    void appModeChanged(NavToolBar::AppMode newMode);
+
 private slots:
     void navSelection(QAction *selection);
 

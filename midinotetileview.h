@@ -13,7 +13,6 @@ public:
 protected:
     void paintEvent(QPaintEvent *event) override;
     void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles = QVector<int>());
-    void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
     int getTilePos(int rowOrCol) const;
@@ -21,8 +20,8 @@ private:
     QRect getTileRect(int index) const;
     QPoint getTilePoint(int index) const;
 
-    int tileSize = 20;
-    int pad = 5;
+    int tileSize = 10;
+    int pad = 2;
     const int numCols = 6;
     int numRows;
 

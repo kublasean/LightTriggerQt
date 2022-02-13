@@ -11,7 +11,7 @@
 #include "dmx-serial/serialdmxdevice.h"
 #include "midi-windows/windowsmidiinputdevice.h"
 #include "midinotemodel.h"
-#include "detectedmidinotemodel.h"
+#include "mididockwidget.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -39,8 +39,8 @@ private:
     QThread dmxThread;
     WindowsMidiInputDevice *midi;
     QColorDialog *colorPicker;
+    MidiDockWidget *midiWidget;
 
     MidiNoteModel notesModel;
-    DetectedMidiNoteModel detectedNotesModel;
 };
 #endif // MAINWINDOW_H

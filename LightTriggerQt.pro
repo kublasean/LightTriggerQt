@@ -11,29 +11,38 @@ CONFIG += c++11
 SOURCES += \
     detectedmidinotemodel.cpp \
     devicesdialog.cpp \
+    fixturewidget.cpp \
     main.cpp \
     mainwindow.cpp \
     midi-windows/windowsmidiinputdevice.cpp \
     midi-windows/windowsmidiutil.cpp \
     dmx-serial/serialdmxdevice.cpp \
+    mididockwidget.cpp \
     midinotemodel.cpp \
     midinotetileview.cpp \
-    navtoolbar.cpp
+    navtoolbar.cpp \
+    scenewidget.cpp
 
 HEADERS += \
     detectedmidinotemodel.h \
     devicesdialog.h \
+    fixturewidget.h \
     mainwindow.h \
     midi-windows/windowsmidiinputdevice.h \
     midi-windows/windowsmidiutil.h \
     dmx-serial/serialdmxdevice.h \
+    mididockwidget.h \
     midinotemodel.h \
     midinotetileview.h \
-    navtoolbar.h
+    navtoolbar.h \
+    scenewidget.h
 
 FORMS += \
     devicesdialog.ui \
-    mainwindow.ui
+    fixturewidget.ui \
+    mainwindow.ui \
+    mididockwidget.ui \
+    scenewidget.ui
 
 LIBS += -lWinmm
 
