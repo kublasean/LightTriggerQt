@@ -25,7 +25,6 @@ MidiNoteTileView::MidiNoteTileView(MidiNoteModel *sourceModel, QWidget *parent)
     setGeometry(0, 0, totalWidth, totalHeight);
     parent->setFixedSize(totalWidth, totalHeight);
     parent->updateGeometry();
-
     connect(model, &QAbstractItemModel::dataChanged, this, &MidiNoteTileView::dataChanged);
 }
 

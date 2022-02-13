@@ -37,11 +37,11 @@ MainWindow::MainWindow(QWidget *parent)
     // Dock widgets
     midiWidget = new MidiDockWidget(&notesModel, this);
     connect(midiWidget->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::onNoteSelectionChanged);
-
+    connect(midi, &WindowsMidiInputDevice::newNoteEvent, midiWidget, &MidiDockWidget::showNote);
     addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, midiWidget);
 
     // Color dialog
-    colorPicker = new QColorDialog();
+    //colorPicker = new QColorDialog();
     /*colorPicker->setOption(QColorDialog::NoButtons);
     ui->horizontalLayout->addWidget(colorPicker);
     connect(colorPicker, &QColorDialog::currentColorChanged, this, &MainWindow::onNewColor);*/
@@ -70,15 +70,15 @@ void MainWindow::openDeviceDialog()
 
 void MainWindow::onNewColor(const QColor &color)
 {
-   QModelIndexList rows = midiWidget->selectionModel()->selectedRows();
+   /*QModelIndexList rows = midiWidget->selectionModel()->selectedRows();
    for (const QModelIndex &row : rows) {
         midiWidget->notesProxyModel()->setData(row, color, Qt::DecorationRole);
-   }
+   }*/
 }
 
 void MainWindow::onNoteSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
-    if (selected.isEmpty()) {
+    /*if (selected.isEmpty()) {
         colorPicker->setCurrentColor(QColor());
         colorPicker->setEnabled(false);
     } else {
@@ -86,5 +86,5 @@ void MainWindow::onNoteSelectionChanged(const QItemSelection &selected, const QI
         qDebug() << "index row:" << index.row();
         colorPicker->setCurrentColor(midiWidget->notesProxyModel()->data(index, Qt::DecorationRole).value<QColor>());
         colorPicker->setEnabled(true);
-    }
+    }*/
 }

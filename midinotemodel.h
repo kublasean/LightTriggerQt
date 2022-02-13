@@ -41,6 +41,7 @@ signals:
 
 private:
     QVector<MidiNoteEffect> noteMap;
+    QColor highlightColor;
 
     static QStringList noteNames;
 };

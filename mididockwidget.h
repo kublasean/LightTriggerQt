@@ -22,6 +22,9 @@ public:
     QItemSelectionModel *selectionModel() const;
     DetectedMidiNoteModel *notesProxyModel();
 
+public slots:
+    void showNote(int note, int velocity);
+
 private:
     Ui::MidiDockWidget *ui;
     DetectedMidiNoteModel detectedNotesModel;

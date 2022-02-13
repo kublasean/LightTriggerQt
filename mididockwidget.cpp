@@ -39,3 +39,9 @@ DetectedMidiNoteModel *MidiDockWidget::notesProxyModel()
 {
     return &detectedNotesModel;
 }
+
+void MidiDockWidget::showNote(int note, int velocity)
+{
+    ui->label->setText("MIDI note: " + QString::number(note) + ", velocity: " + QString::number(velocity));
+    ui->label->setEnabled(velocity != 0);
+}

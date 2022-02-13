@@ -2,6 +2,7 @@
 #define MIDINOTETILEVIEW_H
 
 #include <QWidget>
+#include <QBrush>
 #include "midinotemodel.h"
 
 class MidiNoteTileView : public QWidget
@@ -26,6 +27,8 @@ private:
     int numRows;
 
     MidiNoteModel *model;
+
+    QBrush highlightBrush;
 };
 
 #endif // MIDINOTETILEVIEW_H

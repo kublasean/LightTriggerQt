@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>628</width>
-    <height>556</height>
+    <width>653</width>
+    <height>771</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,33 +17,56 @@
    <property name="autoFillBackground">
     <bool>false</bool>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="2,0">
     <item>
-     <widget class="QWidget" name="tileViewFrame" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QWidget" name="tileViewFrame" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>200</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QListView" name="noteListView">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::ExtendedSelection</enum>
+        </property>
+        <property name="uniformItemSizes">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QLabel" name="label">
       <property name="minimumSize">
        <size>
-        <width>50</width>
+        <width>0</width>
         <height>200</height>
        </size>
       </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QListView" name="noteListView">
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
       <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
+       <enum>QFrame::Box</enum>
       </property>
-      <property name="selectionMode">
-       <enum>QAbstractItemView::ExtendedSelection</enum>
+      <property name="text">
+       <string>TextLabel</string>
       </property>
-      <property name="uniformItemSizes">
-       <bool>true</bool>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </item>

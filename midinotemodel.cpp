@@ -1,7 +1,8 @@
 #include "midinotemodel.h"
 #include <QDebug>
 #include <QBrush>
-
+#include <QApplication>
+#include <QPalette>
 
 QStringList MidiNoteModel::noteNames = {"C","C#","D","D#","E","F","F#","G","G#","A","A#","B"};
 
@@ -26,6 +27,8 @@ MidiNoteModel::MidiNoteModel(QObject *parent)
         noteMap[i].nickname = "";
         noteMap[i].pressed = false;
     }
+
+    highlightColor = qApp->palette().color(QPalette::Highlight);
 }
 
 Qt::ItemFlags MidiNoteModel::flags(const QModelIndex &index) const
@@ -60,10 +63,8 @@ QVariant MidiNoteModel::data(const QModelIndex &index, int role) const
         tmp.setValue(details);
         return tmp;
     }
-    case Qt::DecorationRole:
-        return details.color;
     case Qt::BackgroundRole:
-        return details.pressed ? QBrush(details.color) : QBrush(Qt::NoBrush);
+        return details.pressed ? highlightColor : QVariant();
     default:
         return QVariant();
     }
