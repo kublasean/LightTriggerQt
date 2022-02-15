@@ -18,21 +18,23 @@
     <bool>false</bool>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout" stretch="2,0">
+    <property name="spacing">
+     <number>11</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>11</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QWidget" name="tileViewFrame" native="true">
-        <property name="minimumSize">
-         <size>
-          <width>50</width>
-          <height>200</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-       </widget>
-      </item>
       <item>
        <widget class="QListView" name="noteListView">
         <property name="styleSheet">

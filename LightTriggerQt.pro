@@ -19,7 +19,7 @@ SOURCES += \
     dmx-serial/serialdmxdevice.cpp \
     mididockwidget.cpp \
     midinotemodel.cpp \
-    midinotetileview.cpp \
+    midinotetilewindow.cpp \
     navtoolbar.cpp \
     scenewidget.cpp
 
@@ -33,7 +33,7 @@ HEADERS += \
     dmx-serial/serialdmxdevice.h \
     mididockwidget.h \
     midinotemodel.h \
-    midinotetileview.h \
+    midinotetilewindow.h \
     navtoolbar.h \
     scenewidget.h
 

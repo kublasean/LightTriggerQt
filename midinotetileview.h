@@ -21,8 +21,8 @@ private:
     QRect getTileRect(int index) const;
     QPoint getTilePoint(int index) const;
 
-    int tileSize = 10;
-    int pad = 2;
+    const int tileSize = 10;
+    const int pad = 2;
     const int numCols = 6;
     int numRows;
 

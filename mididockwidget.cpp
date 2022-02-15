@@ -1,9 +1,10 @@
 #include "mididockwidget.h"
 #include "ui_mididockwidget.h"
-#include "midinotetileview.h"
+#include "midinotetilewindow.h"
 
 #include <QItemSelectionModel>
 #include <QGraphicsDropShadowEffect>
+#include <QSizePolicy>
 
 MidiDockWidget::MidiDockWidget(MidiNoteModel *notesModel, QWidget *parent) :
     QDockWidget(parent),
@@ -21,8 +22,11 @@ MidiDockWidget::MidiDockWidget(MidiNoteModel *notesModel, QWidget *parent) :
     ui->noteListView->setModel(&detectedNotesModel);
     ui->noteListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-    ui->horizontalLayout->setAlignment(ui->tileViewFrame, Qt::AlignTop);
-    new MidiNoteTileView(notesModel, ui->tileViewFrame);
+
+    MidiNoteTileWindow *window = new MidiNoteTileWindow(notesModel);
+    QWidget *container = QWidget::createWindowContainer(window, nullptr, Qt::Widget);
+    container->setFixedSize(window->getPreferredSize());
+    ui->horizontalLayout->insertWidget(0, container, 0, Qt::AlignTop);
 }
 
 MidiDockWidget::~MidiDockWidget()

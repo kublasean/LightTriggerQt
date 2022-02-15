@@ -15,7 +15,6 @@ MidiNoteTileView::MidiNoteTileView(MidiNoteModel *sourceModel, QWidget *parent)
 
     setAutoFillBackground(true);
     setAttribute(Qt::WA_StaticContents, true);
-    setMouseTracking(true);
 
     numRows = sourceModel->rowCount() / numCols + (sourceModel->rowCount() % numCols == 0 ? 0 : 1);
 
