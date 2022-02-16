@@ -1,7 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "devicesdialog.h"
-#include "navtoolbar.h"
+#include "fixturewidget.h"
+#include "scenewidget.h"
 
 #include <QDebug>
 #include <QColorDialog>
@@ -32,13 +33,23 @@ MainWindow::MainWindow(QWidget *parent)
     menuBar()->addAction(tr("Devices"), this, &MainWindow::openDeviceDialog);
 
     // Nav toolbar
-    addToolBar(Qt::ToolBarArea::LeftToolBarArea, new NavToolBar(this));
+    NavToolBar *toolbar = new NavToolBar(this);
+    addToolBar(Qt::ToolBarArea::LeftToolBarArea, toolbar);
+    connect(toolbar, &NavToolBar::appModeChanged, this, &MainWindow::appModeChanged);
 
     // Dock widgets
     midiWidget = new MidiDockWidget(&notesModel, this);
     connect(midiWidget->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::onNoteSelectionChanged);
     connect(midi, &WindowsMidiInputDevice::newNoteEvent, midiWidget, &MidiDockWidget::showNote);
     addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, midiWidget);
+    midiWidget->hide();
+
+
+    // Central widget
+    stackedWidget = new QStackedWidget();
+    stackedWidget->addWidget(new FixtureWidget());  // added first so becomes initially selected
+    stackedWidget->addWidget(new SceneWidget());
+    setCentralWidget(stackedWidget);
 
     // Color dialog
     //colorPicker = new QColorDialog();
@@ -68,13 +79,15 @@ void MainWindow::openDeviceDialog()
     dialog.exec();
 }
 
+/*
 void MainWindow::onNewColor(const QColor &color)
 {
-   /*QModelIndexList rows = midiWidget->selectionModel()->selectedRows();
+   QModelIndexList rows = midiWidget->selectionModel()->selectedRows();
    for (const QModelIndex &row : rows) {
         midiWidget->notesProxyModel()->setData(row, color, Qt::DecorationRole);
-   }*/
+   }
 }
+*/
 
 void MainWindow::onNoteSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
@@ -87,4 +100,22 @@ void MainWindow::onNoteSelectionChanged(const QItemSelection &selected, const QI
         colorPicker->setCurrentColor(midiWidget->notesProxyModel()->data(index, Qt::DecorationRole).value<QColor>());
         colorPicker->setEnabled(true);
     }*/
+}
+
+void MainWindow::appModeChanged(NavToolBar::AppMode mode)
+{
+    switch (mode) {
+    case NavToolBar::AppMode::Project:
+        midiWidget->hide();
+        stackedWidget->setCurrentIndex(0);
+        break;
+    case NavToolBar::AppMode::Scenes:
+        midiWidget->hide();
+        stackedWidget->setCurrentIndex(1);
+        break;
+    case NavToolBar::AppMode::Triggers:
+        midiWidget->show();
+        stackedWidget->setCurrentIndex(1);
+        break;
+    }
 }

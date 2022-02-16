@@ -5,13 +5,16 @@
 #include <QAction>
 #include <QThread>
 #include <QColor>
-#include <QColorDialog>
 #include <QItemSelection>
+#include <QStackedWidget>
+
 
 #include "dmx-serial/serialdmxdevice.h"
 #include "midi-windows/windowsmidiinputdevice.h"
 #include "midinotemodel.h"
 #include "mididockwidget.h"
+#include "navtoolbar.h"
+
 
 
 QT_BEGIN_NAMESPACE
@@ -30,16 +33,17 @@ signals:
 
 private slots:
     void openDeviceDialog();
-    void onNewColor(const QColor &color);
     void onNoteSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+    void appModeChanged(NavToolBar::AppMode newMode);
 
 private:
     Ui::MainWindow *ui;
+    MidiDockWidget *midiWidget;
+    QStackedWidget *stackedWidget;
+
     SerialDmxDevice *dmx;
     QThread dmxThread;
     WindowsMidiInputDevice *midi;
-    QColorDialog *colorPicker;
-    MidiDockWidget *midiWidget;
 
     MidiNoteModel notesModel;
 };

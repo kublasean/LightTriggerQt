@@ -1,12 +1,14 @@
 #include "navtoolbar.h"
 #include <QActionGroup>
 #include <QDebug>
+#include <QToolButton>
 
 NavToolBar::NavToolBar(QWidget *parent)
     : QToolBar(parent)
 {
     // Toolbar styling
     setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonTextUnderIcon);
+    setMovable(false);
 
     QActionGroup *navGroup = new QActionGroup(this);
 
@@ -25,9 +27,23 @@ NavToolBar::NavToolBar(QWidget *parent)
 
     connect(navGroup, &QActionGroup::triggered, this, &NavToolBar::navSelection);
     addActions(navGroup->actions());
+
+    // Resize all icons to the size of the largest one
+    int maxWidth = 0;
+    const QList<QAction *> actions = navGroup->actions();
+    for (QAction *action : actions) {
+        QWidget *widget = widgetForAction(action);
+        maxWidth = qMax(maxWidth, widget->width());
+    }
+
+    for (QAction *action : actions) {
+        QWidget *widget = widgetForAction(action);
+        widget->setFixedWidth(maxWidth);
+    }
 }
 
 void NavToolBar::navSelection(QAction *action)
 {
     AppMode mode = qvariant_cast<AppMode>(action->data());
+    emit appModeChanged(mode);
 }
