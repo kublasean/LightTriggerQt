@@ -3,8 +3,8 @@
 
 #include <QDialog>
 
-#include "dmx-serial/serialdmxdevice.h"
-#include "midi-windows/windowsmidiinputdevice.h"
+#include "dmx/serialdmxdevice.h"
+#include "midi/windowsmidiinputdevice.h"
 
 namespace Ui {
 class DevicesDialog;

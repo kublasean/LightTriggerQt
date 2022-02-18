@@ -14,36 +14,39 @@ CONFIG -= debug_and_release
 SOURCES += \
     detectedmidinotemodel.cpp \
     devicesdialog.cpp \
+    fixturedetailwidget.cpp \
     fixtureitemdelegate.cpp \
     fixturewidget.cpp \
     main.cpp \
     mainwindow.cpp \
-    midi-windows/windowsmidiinputdevice.cpp \
-    midi-windows/windowsmidiutil.cpp \
-    dmx-serial/serialdmxdevice.cpp \
+    midi/windowsmidiinputdevice.cpp \
+    dmx/serialdmxdevice.cpp \
     mididockwidget.cpp \
     midinotemodel.cpp \
     midinotetilewindow.cpp \
     navtoolbar.cpp \
+    openfixturefilereaderthread.cpp \
     scenewidget.cpp
 
 HEADERS += \
     detectedmidinotemodel.h \
     devicesdialog.h \
+    fixturedetailwidget.h \
     fixtureitemdelegate.h \
     fixturewidget.h \
     mainwindow.h \
-    midi-windows/windowsmidiinputdevice.h \
-    midi-windows/windowsmidiutil.h \
-    dmx-serial/serialdmxdevice.h \
+    midi/windowsmidiinputdevice.h \
+    dmx/serialdmxdevice.h \
     mididockwidget.h \
     midinotemodel.h \
     midinotetilewindow.h \
     navtoolbar.h \
+    openfixturefilereaderthread.h \
     scenewidget.h
 
 FORMS += \
     devicesdialog.ui \
+    fixturedetailwidget.ui \
     fixturewidget.ui \
     mainwindow.ui \
     mididockwidget.ui \

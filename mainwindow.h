@@ -9,8 +9,8 @@
 #include <QStackedWidget>
 
 
-#include "dmx-serial/serialdmxdevice.h"
-#include "midi-windows/windowsmidiinputdevice.h"
+#include "dmx/serialdmxdevice.h"
+#include "midi/windowsmidiinputdevice.h"
 #include "midinotemodel.h"
 #include "mididockwidget.h"
 #include "navtoolbar.h"

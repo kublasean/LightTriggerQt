@@ -1,12 +1,21 @@
 #include "devicesdialog.h"
 #include "ui_devicesdialog.h"
-#include "midi-windows/windowsmidiutil.h"
 
 #include "windows.h"
 
 #include <QDebug>
 #include <QSerialPortInfo>
 #include <QSettings>
+
+void printMMRESULT(MMRESULT err)
+{
+    wchar_t errBuf[MAXERRORLENGTH];
+    if (midiInGetErrorTextW(err, errBuf, MAXERRORLENGTH) == MMSYSERR_NOERROR) {
+        qDebug() << "MIDI error:" << QString::fromWCharArray(errBuf);
+    } else {
+        qDebug() << "Unknown MIDI error";
+    }
+}
 
 DevicesDialog::DevicesDialog(SerialDmxDevice *dmx, WindowsMidiInputDevice *midi, QWidget *parent) :
     QDialog(parent),

@@ -10,6 +10,7 @@ FixtureItemDelegate::FixtureItemDelegate(QObject *parent)
 
 }
 
+// https://stackoverflow.com/a/58688327
 void FixtureItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
 
@@ -24,7 +25,7 @@ void FixtureItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem& o
     QStyleOptionViewItem opt = option;
     initStyleOption(&opt, index);
     opt.text = model->fileInfo(index).baseName();               // No extension
-    opt.features &= ~(QStyleOptionViewItem::HasDecoration);     // No Icon
+    opt.features &= ~(QStyleOptionViewItem::HasDecoration);     // No Icon (https://stackoverflow.com/a/3920316)
 
     const QWidget *widget = option.widget;
     widget->style()->drawControl(QStyle::CE_ItemViewItem, &opt, painter, widget);
