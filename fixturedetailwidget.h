@@ -22,6 +22,9 @@ public:
 public slots:
     void setDetails(const FixtureDetails &details);
 
+private slots:
+    void modeChanged(int modeIndex);
+
 private:
     QLineEdit *createLineEdit();
     void setDetail(QLineEdit *field, const QString &value);
@@ -29,6 +32,8 @@ private:
     Ui::FixtureDetailWidget *ui;
 
     QLineEdit *dimensionsLineEdit, *weightLineEdit, *powerLineEdit, *connectorLineEdit;
+
+    FixtureDetails cachedDetails;
 };
 
 #endif // FIXTUREDETAILWIDGET_H

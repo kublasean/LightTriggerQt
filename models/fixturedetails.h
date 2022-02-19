@@ -7,17 +7,22 @@
 
 struct FixtureCapability {
     QString typeName;
-    bool isValid = false;
+
+    bool isValid() const { return !typeName.isNull() && !typeName.isEmpty(); }
 };
 
 struct FixtureChannel {
     QString name;
     QList<FixtureCapability> capabilities;
+
+    bool isValid() const { return !name.isNull() && !name.isEmpty() && !capabilities.isEmpty(); }
 };
 
 struct FixtureMode {
     QString name;
-    QList<int> channels;
+    QList<FixtureChannel> channels;
+
+    bool isValid() const { return !name.isNull() && !name.isEmpty() && !channels.isEmpty(); }
 };
 
 struct FixtureDetails {
@@ -27,8 +32,9 @@ struct FixtureDetails {
     QString power;
     QString connector;
 
-    QMap<QString, FixtureChannel> availableChannels;
     QList<FixtureMode> modes;
+
+    bool isValid() const { return !name.isNull() && !name.isEmpty() && !modes.isEmpty(); }
 };
 
 Q_DECLARE_METATYPE(FixtureDetails);

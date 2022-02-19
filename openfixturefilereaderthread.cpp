@@ -12,19 +12,29 @@
 
 #define SUPPORTED_OPENFIXTURE_MAJOR_VERSION 12
 
+FixtureMode parseJsonMode(const QJsonObject &json, const QMap<QString, FixtureChannel> *availableChannels)
+{
+    FixtureMode mode;
+
+    mode.name = json.value("name").toString();
+    QJsonArray channels = json.value("channels").toArray();
+    for (auto it = channels.begin(); it != channels.end(); it++) {
+        QJsonValue val = *it;
+        QString key = val.toString();
+
+        if (!availableChannels->contains(key))
+            continue;
+
+        mode.channels.append(availableChannels->value(key));
+    }
+
+    return mode;
+}
+
 FixtureCapability parseJsonCapabilty(const QJsonObject &json)
 {
     FixtureCapability cap;
-
-    if (json.isEmpty())
-        return cap;
-
-    QJsonValue val = json.value("type");
-    if (!val.isString())
-        return cap;
-
-    cap.typeName = val.toString();
-    cap.isValid = true;
+    cap.typeName = json.value("type").toString();
     return cap;
 }
 
@@ -134,6 +144,7 @@ void OpenFixtureFileReaderThread::run()
     }
 
     // Available channels
+    QMap<QString, FixtureChannel> availableChannels;
     val = root.value("availableChannels");
     if (!val.isObject()) {
         parseError("Malformed available channels");
@@ -150,11 +161,11 @@ void OpenFixtureFileReaderThread::run()
 
         // Single capability
         FixtureCapability cap = parseJsonCapabilty(channelObj.value("capability").toObject());
-        if (cap.isValid) {
+        if (cap.isValid()) {
             FixtureChannel channel;
             channel.capabilities.append(cap);
             channel.name = it.key();
-            fixture.availableChannels.insert(it.key(), channel);
+            availableChannels.insert(it.key(), channel);
             continue;
         }
 
@@ -164,13 +175,38 @@ void OpenFixtureFileReaderThread::run()
         channel.name = it.key();
         for (int i=0; i<capArray.size(); i++) {
             cap = parseJsonCapabilty(capArray[i].toObject());
-            if (cap.isValid) {
+            if (cap.isValid()) {
                 channel.capabilities.append(cap);
             }
         }
         if (!channel.capabilities.isEmpty()) {
-            fixture.availableChannels.insert(it.key(), channel);
+            availableChannels.insert(it.key(), channel);
         }
+    }
+
+    // TODO: handle template channels
+
+    // Modes
+    val = root.value("modes");
+    if (!val.isArray()) {
+        parseError("Malformed or missing modes of operation");
+        return;
+    }
+
+    QJsonArray modesArray = val.toArray();
+    for (auto it = modesArray.begin(); it != modesArray.end(); it++) {
+        val = *it;
+        if (!val.isObject())
+            continue;
+
+        FixtureMode newMode = parseJsonMode(val.toObject(), &availableChannels);
+        if (newMode.isValid())
+            fixture.modes.append(newMode);
+    }
+
+    if (!fixture.isValid()) {
+        parseError("Missing modes or name for fixture");
+        return;
     }
 
     emit parsedDetails(fixture);

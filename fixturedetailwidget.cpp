@@ -12,14 +12,16 @@ FixtureDetailWidget::FixtureDetailWidget(QWidget *parent) :
     powerLineEdit = createLineEdit();
     connectorLineEdit = createLineEdit();
 
-    ui->formLayout->addRow(tr("Dimensions"), dimensionsLineEdit);
-    ui->formLayout->addRow(tr("Weight"), weightLineEdit);
-    ui->formLayout->addRow(tr("Power"), powerLineEdit);
-    ui->formLayout->addRow(tr("Connector"), connectorLineEdit);
+    ui->formLayout->insertRow(0,tr("Connector"), connectorLineEdit);
+    ui->formLayout->insertRow(0, tr("Power"), powerLineEdit);
+    ui->formLayout->insertRow(0, tr("Weight"), weightLineEdit);
+    ui->formLayout->insertRow(0, tr("Dimensions"), dimensionsLineEdit);
 
     setDisabled(true);
 
     ui->groupBox->setTitle(tr("Fixture"));
+
+    connect(ui->comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &FixtureDetailWidget::modeChanged);
 }
 
 FixtureDetailWidget::~FixtureDetailWidget()
@@ -41,6 +43,14 @@ void FixtureDetailWidget::setDetail(QLineEdit *field, const QString &value)
 
 void FixtureDetailWidget::setDetails(const FixtureDetails &details)
 {
+    if (!details.isValid()) {
+        return;
+    }
+
+    setEnabled(true);
+
+    cachedDetails = details;
+
     ui->groupBox->setTitle(details.name);
 
     setDetail(dimensionsLineEdit, details.dimensions);
@@ -48,10 +58,24 @@ void FixtureDetailWidget::setDetails(const FixtureDetails &details)
     setDetail(powerLineEdit, details.power);
     setDetail(connectorLineEdit, details.connector);
 
-    setEnabled(true);
 
+    ui->comboBox->clear();
     ui->listWidget->clear();
-    for (auto it = details.availableChannels.constBegin(); it != details.availableChannels.constEnd(); it++) {
-        ui->listWidget->addItem(it.value().name);
+
+    for (auto it = details.modes.constBegin(); it != details.modes.constEnd(); it++) {
+        ui->comboBox->addItem(it->name);
+    }
+}
+
+void FixtureDetailWidget::modeChanged(int modeIndex)
+{
+    ui->listWidget->clear();
+
+    if (modeIndex < 0 || modeIndex >= cachedDetails.modes.size()) {
+        return;
+    }
+
+    for (int i=0; i < cachedDetails.modes[modeIndex].channels.size(); i++) {
+        ui->listWidget->addItem(QString::number(i) + ": " + cachedDetails.modes[modeIndex].channels[i].name);
     }
 }
