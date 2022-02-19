@@ -40,6 +40,7 @@ HEADERS += \
     mididockwidget.h \
     midinotemodel.h \
     midinotetilewindow.h \
+    models/fixturedetails.h \
     navtoolbar.h \
     openfixturefilereaderthread.h \
     scenewidget.h

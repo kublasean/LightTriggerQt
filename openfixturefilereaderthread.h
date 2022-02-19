@@ -1,6 +1,8 @@
 #ifndef OPENFIXTUREFILEREADERTHREAD_H
 #define OPENFIXTUREFILEREADERTHREAD_H
 
+#include "models/fixturedetails.h"
+
 #include <QThread>
 
 class OpenFixtureFileReaderThread : public QThread
@@ -13,10 +15,7 @@ public:
     void run() override;
 
 signals:
-    void parsedDetails(const QString &dim,
-                       const QString &weight,
-                       const QString &power,
-                       const QString &conn);
+    void parsedDetails(const FixtureDetails &details);
 
     void errorMessage(QString error);
 

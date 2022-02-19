@@ -39,15 +39,19 @@ void FixtureDetailWidget::setDetail(QLineEdit *field, const QString &value)
     field->setText(value);
 }
 
-void FixtureDetailWidget::setDetails(const QString &dim,
-                                     const QString &weight,
-                                     const QString &power,
-                                     const QString &conn)
+void FixtureDetailWidget::setDetails(const FixtureDetails &details)
 {
-    setDetail(dimensionsLineEdit, dim);
-    setDetail(weightLineEdit, weight);
-    setDetail(powerLineEdit, power);
-    setDetail(connectorLineEdit, conn);
+    ui->groupBox->setTitle(details.name);
+
+    setDetail(dimensionsLineEdit, details.dimensions);
+    setDetail(weightLineEdit, details.weight);
+    setDetail(powerLineEdit, details.power);
+    setDetail(connectorLineEdit, details.connector);
 
     setEnabled(true);
+
+    ui->listWidget->clear();
+    for (auto it = details.availableChannels.constBegin(); it != details.availableChannels.constEnd(); it++) {
+        ui->listWidget->addItem(it.value().name);
+    }
 }

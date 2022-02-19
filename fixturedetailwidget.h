@@ -1,6 +1,8 @@
 #ifndef FIXTUREDETAILWIDGET_H
 #define FIXTUREDETAILWIDGET_H
 
+#include "models/fixturedetails.h"
+
 #include <QWidget>
 #include <QLineEdit>
 
@@ -18,10 +20,7 @@ public:
     ~FixtureDetailWidget();
 
 public slots:
-    void setDetails(const QString &dim,
-                    const QString &weight,
-                    const QString &power,
-                    const QString &conn);
+    void setDetails(const FixtureDetails &details);
 
 private:
     QLineEdit *createLineEdit();

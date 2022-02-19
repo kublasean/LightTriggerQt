@@ -1,4 +1,4 @@
-#include "openfixturefilereaderthread.h"
+﻿#include "openfixturefilereaderthread.h"
 #include <QFile>
 #include <QIODevice>
 #include <QJsonDocument>
@@ -11,6 +11,22 @@
 #include <QRegularExpressionMatch>
 
 #define SUPPORTED_OPENFIXTURE_MAJOR_VERSION 12
+
+FixtureCapability parseJsonCapabilty(const QJsonObject &json)
+{
+    FixtureCapability cap;
+
+    if (json.isEmpty())
+        return cap;
+
+    QJsonValue val = json.value("type");
+    if (!val.isString())
+        return cap;
+
+    cap.typeName = val.toString();
+    cap.isValid = true;
+    return cap;
+}
 
 QString dimensionsToString(QJsonValue value)
 {
@@ -97,13 +113,65 @@ void OpenFixtureFileReaderThread::run()
         return;
     }
 
+    FixtureDetails fixture;
+
+    // Name
+    val = root.value("name");
+    if (val.isUndefined() || !val.isString()) {
+        parseError("No fixture name");
+        return;
+    }
+    fixture.name = val.toString();
+
     // Parse physical properties if present
     val = root.value("physical");
     if (!val.isUndefined() && val.isObject()) {
         QJsonObject node = val.toObject();
-        emit parsedDetails(dimensionsToString(node.value("dimensions")),
-                           weightToString(node.value("weight")),
-                           powerToString(node.value("power")),
-                           node.value("DMXconnector").toString());
+        fixture.dimensions = dimensionsToString(node.value("dimensions"));
+        fixture.weight = weightToString(node.value("weight"));
+        fixture.power = powerToString(node.value("power"));
+        fixture.connector = node.value("DMXconnector").toString();
     }
+
+    // Available channels
+    val = root.value("availableChannels");
+    if (!val.isObject()) {
+        parseError("Malformed available channels");
+        return;
+    }
+
+    QJsonObject channelsObj = val.toObject();
+    for (auto it = channelsObj.begin(); it != channelsObj.end(); it++) {
+        QString channelKey = it.key();
+        if (!it.value().isObject())
+            continue;
+
+        QJsonObject channelObj = it.value().toObject();
+
+        // Single capability
+        FixtureCapability cap = parseJsonCapabilty(channelObj.value("capability").toObject());
+        if (cap.isValid) {
+            FixtureChannel channel;
+            channel.capabilities.append(cap);
+            channel.name = it.key();
+            fixture.availableChannels.insert(it.key(), channel);
+            continue;
+        }
+
+        // Multiple capabilities
+        QJsonArray capArray = channelObj.value("capabilities").toArray();
+        FixtureChannel channel;
+        channel.name = it.key();
+        for (int i=0; i<capArray.size(); i++) {
+            cap = parseJsonCapabilty(capArray[i].toObject());
+            if (cap.isValid) {
+                channel.capabilities.append(cap);
+            }
+        }
+        if (!channel.capabilities.isEmpty()) {
+            fixture.availableChannels.insert(it.key(), channel);
+        }
+    }
+
+    emit parsedDetails(fixture);
 }
