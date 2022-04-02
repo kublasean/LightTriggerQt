@@ -127,11 +127,13 @@ void SerialDmxDevice::onError(QSerialPort::SerialPortError error)
         stop();
 }
 
-void SerialDmxDevice::setColor(const QColor &color)
+void SerialDmxDevice::newChannelValues(const QVector<QPair<int, int> > &values)
 {
-    buffer[2] = color.red();
-    buffer[3] = color.green();
-    buffer[4] = color.blue();
+    // Plus one since buffer starts with 0x00
+    for (auto it = values.constBegin(); it!=values.constEnd(); it++) {
+        buffer[it->first+1] = it->second;
+    }
 }
+
 
 

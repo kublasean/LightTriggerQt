@@ -1,5 +1,12 @@
 #include "fixturedetailwidget.h"
 #include "ui_fixturedetailwidget.h"
+#include "models/fixturemimedata.h"
+
+#include <QDrag>
+#include <QPoint>
+#include <QMouseEvent>
+#include <QDebug>
+#include <QWindow>
 
 FixtureDetailWidget::FixtureDetailWidget(QWidget *parent) :
     QWidget(parent),
@@ -78,4 +85,47 @@ void FixtureDetailWidget::modeChanged(int modeIndex)
     for (int i=0; i < cachedDetails.modes[modeIndex].channels.size(); i++) {
         ui->listWidget->addItem(QString::number(i) + ": " + cachedDetails.modes[modeIndex].channels[i].name);
     }
+}
+
+void FixtureDetailWidget::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton && isEnabled()) {
+        dragPos = event->pos();
+    } else {
+        dragPos = QPoint();
+    }
+
+    QWidget::mousePressEvent(event);
+}
+
+void FixtureDetailWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    if (dragPos.isNull() || !(event->buttons() & Qt::LeftButton))
+        return;
+
+    if ((event->pos() - dragPos).manhattanLength() < QApplication::startDragDistance())
+        return;
+
+    qDebug() << "EVENT POS" << event->pos() << "WIDGET POS" << pos();
+
+    ActiveFixture fixture;
+    fixture.mode = cachedDetails.modes[ui->comboBox->currentIndex()];
+    fixture.detailsAbsolutePath = cachedDetails.absolutePath;
+    fixture.id = 1;
+    fixture.name = cachedDetails.name;
+
+    FixtureMimeData *data = new FixtureMimeData(fixture);
+
+    //qreal dpr = window()->windowHandle()->devicePixelRatio();
+    //QPixmap pixmap(size() * dpr);
+    //pixmap.setDevicePixelRatio(dpr);
+    //render(&pixmap);
+
+    QDrag *drag = new QDrag(this);
+    drag->setMimeData(data);
+    //drag->setPixmap(pixmap);
+    //drag->setHotSpot(data->hotspot);
+
+    drag->exec(Qt::CopyAction);
+    dragPos = QPoint();
 }

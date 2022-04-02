@@ -31,10 +31,28 @@ struct FixtureDetails {
     QString weight;
     QString power;
     QString connector;
+    QString absolutePath;
 
     QList<FixtureMode> modes;
 
     bool isValid() const { return !name.isNull() && !name.isEmpty() && !modes.isEmpty(); }
+};
+
+struct ActiveFixture {
+    FixtureMode mode;
+    QString name;
+    QString detailsAbsolutePath;
+    int id;
+
+    ActiveFixture() {
+        name = "";
+        detailsAbsolutePath = "";
+        id = 1;
+    }
+
+    QString fixtureId() const {
+        return name + " " + mode.name + " " + QString::number(id);
+    }
 };
 
 Q_DECLARE_METATYPE(FixtureDetails);

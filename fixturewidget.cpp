@@ -1,7 +1,6 @@
 #include "fixturewidget.h"
 #include "ui_fixturewidget.h"
 #include "fixtureitemdelegate.h"
-#include "openfixturefilereaderthread.h"
 
 #include <QFileSystemModel>
 #include <QCoreApplication>
@@ -14,11 +13,13 @@ QString safeJoinPath(QString path1, QString path2)
     return QDir::cleanPath(path1 + QDir::separator() + path2);
 }
 
-FixtureWidget::FixtureWidget(QWidget *parent) :
+FixtureWidget::FixtureWidget(FixtureDetailsCache *cache, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::FixtureWidget)
 {
     ui->setupUi(this);
+
+    fixtureCache = cache;
 
     // Fixture browser
     QFileSystemModel *model = new QFileSystemModel(this);
@@ -41,6 +42,9 @@ FixtureWidget::FixtureWidget(QWidget *parent) :
     // Fixture detail
     detailWidget = new FixtureDetailWidget();
     ui->verticalLayout->addWidget(detailWidget);
+
+    connect(&detailsReceiver, &FixtureDetailsReceiver::parsedDetails, detailWidget, &FixtureDetailWidget::setDetails);
+    connect(&detailsReceiver, &FixtureDetailsReceiver::errorMessage, this, &FixtureWidget::showFixtureErrorMessage);
 }
 
 FixtureWidget::~FixtureWidget()
@@ -56,11 +60,7 @@ void FixtureWidget::currentPathChanged(const QModelIndex &newPath, const QModelI
     if (model->fileInfo(newPath).isDir())
         return;
 
-    OpenFixtureFileReaderThread *parserThread = new OpenFixtureFileReaderThread(model->filePath(newPath), this);
-    connect(parserThread, &QThread::finished, parserThread, &QObject::deleteLater);
-    connect(parserThread, &OpenFixtureFileReaderThread::parsedDetails, detailWidget, &FixtureDetailWidget::setDetails);
-    connect(parserThread, &OpenFixtureFileReaderThread::errorMessage, this, &FixtureWidget::showFixtureErrorMessage);
-    parserThread->start();
+    fixtureCache->getFixture(path, &detailsReceiver);
 }
 
 void FixtureWidget::showFixtureErrorMessage(const QString &msg)

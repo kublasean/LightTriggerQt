@@ -124,6 +124,7 @@ void OpenFixtureFileReaderThread::run()
     }
 
     FixtureDetails fixture;
+    fixture.absolutePath = path;
 
     // Name
     val = root.value("name");

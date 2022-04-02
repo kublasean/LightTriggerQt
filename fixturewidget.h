@@ -2,6 +2,7 @@
 #define FIXTUREWIDGET_H
 
 #include "fixturedetailwidget.h"
+#include "fixturedetailscache.h"
 
 #include <QWidget>
 
@@ -14,7 +15,7 @@ class FixtureWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit FixtureWidget(QWidget *parent = nullptr);
+    explicit FixtureWidget(FixtureDetailsCache *cache, QWidget *parent = nullptr);
     ~FixtureWidget();
 
 private slots:
@@ -24,6 +25,8 @@ private slots:
 private:
     Ui::FixtureWidget *ui;
     FixtureDetailWidget *detailWidget;
+    FixtureDetailsCache *fixtureCache;
+    FixtureDetailsReceiver detailsReceiver;
 };
 
 #endif // FIXTUREWIDGET_H

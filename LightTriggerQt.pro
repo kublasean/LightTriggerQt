@@ -12,8 +12,13 @@ CONFIG -= debug_and_release
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    channel-slider/channelitemmodel.cpp \
+    channel-slider/channelslideradapter.cpp \
+    channel-slider/channelsliderviewholder.cpp \
+    channel-slider/customlistitem.cpp \
     detectedmidinotemodel.cpp \
     devicesdialog.cpp \
+    fixturedetailscache.cpp \
     fixturedetailwidget.cpp \
     fixtureitemdelegate.cpp \
     fixturewidget.cpp \
@@ -24,13 +29,24 @@ SOURCES += \
     mididockwidget.cpp \
     midinotemodel.cpp \
     midinotetilewindow.cpp \
+    models/fixturemimedata.cpp \
     navtoolbar.cpp \
     openfixturefilereaderthread.cpp \
+    recycler/recyclermimedata.cpp \
+    recycler/recyclerview.cpp \
+    recycler/recyclerviewadapter.cpp \
+    recycler/recyclerviewpool.cpp \
+    recycler/viewholder.cpp \
     scenewidget.cpp
 
 HEADERS += \
+    channel-slider/channelitemmodel.h \
+    channel-slider/channelslideradapter.h \
+    channel-slider/channelsliderviewholder.h \
+    channel-slider/customlistitem.h \
     detectedmidinotemodel.h \
     devicesdialog.h \
+    fixturedetailscache.h \
     fixturedetailwidget.h \
     fixtureitemdelegate.h \
     fixturewidget.h \
@@ -41,11 +57,18 @@ HEADERS += \
     midinotemodel.h \
     midinotetilewindow.h \
     models/fixturedetails.h \
+    models/fixturemimedata.h \
     navtoolbar.h \
     openfixturefilereaderthread.h \
+    recycler/recyclermimedata.h \
+    recycler/recyclerview.h \
+    recycler/recyclerviewadapter.h \
+    recycler/recyclerviewpool.h \
+    recycler/viewholder.h \
     scenewidget.h
 
 FORMS += \
+    channel-slider/customlistitem.ui \
     devicesdialog.ui \
     fixturedetailwidget.ui \
     fixturewidget.ui \

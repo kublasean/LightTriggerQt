@@ -14,7 +14,7 @@
 #include "midinotemodel.h"
 #include "mididockwidget.h"
 #include "navtoolbar.h"
-
+#include "fixturedetailscache.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -30,14 +30,17 @@ public:
     ~MainWindow();
 
 signals:
+    void newDmxValues(const QVector<QPair<int, int> > &values);
 
 private slots:
     void openDeviceDialog();
     void onNoteSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     void appModeChanged(NavToolBar::AppMode newMode);
+    void onChannelDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles = QVector<int>());
 
 private:
     Ui::MainWindow *ui;
+    QDockWidget *fixtureDockWidget;
     MidiDockWidget *midiWidget;
     QStackedWidget *stackedWidget;
 
@@ -46,5 +49,7 @@ private:
     WindowsMidiInputDevice *midi;
 
     MidiNoteModel notesModel;
+
+    FixtureDetailsCache fixtureCache;
 };
 #endif // MAINWINDOW_H

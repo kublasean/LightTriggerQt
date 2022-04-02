@@ -8,6 +8,7 @@ int main(int argc, char *argv[])
 {
     // Register our custom types for use with signals/slots
     qRegisterMetaType<FixtureDetails>();
+    qRegisterMetaType<QVector<QPair<int,int> > >();
 
     QApplication a(argc, argv);
     QCoreApplication::setOrganizationName("KublaSoft");

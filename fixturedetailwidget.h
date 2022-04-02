@@ -22,6 +22,10 @@ public:
 public slots:
     void setDetails(const FixtureDetails &details);
 
+protected:
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+
 private slots:
     void modeChanged(int modeIndex);
 
@@ -34,6 +38,8 @@ private:
     QLineEdit *dimensionsLineEdit, *weightLineEdit, *powerLineEdit, *connectorLineEdit;
 
     FixtureDetails cachedDetails;
+
+    QPoint dragPos;
 };
 
 #endif // FIXTUREDETAILWIDGET_H

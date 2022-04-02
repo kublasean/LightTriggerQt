@@ -19,7 +19,8 @@ public slots:
     void newSelectedDevice(QString portName);
     void start();
     void stop();
-    void setColor(const QColor &color);
+
+    void newChannelValues(const QVector<QPair<int,int> > &values);
 
 signals:
     void debugMessage(QString message, int timeout=0);
